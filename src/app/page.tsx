@@ -8,6 +8,7 @@ import { useState } from 'react';
 export default function Home() {
   const [visualizationStyle, setVisualizationStyle] = useState<'waveform' | 'frequencyBars' | 'line'>('line');
   const [colorPalette, setColorPalette] = useState<string>('default');
+  const [customColor, setCustomColor] = useState<string>('#008080');
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -17,9 +18,11 @@ export default function Home() {
           visualizationStyle={visualizationStyle}
           setColorPalette={setColorPalette}
           colorPalette={colorPalette}
+          setCustomColor={setCustomColor}
+          customColor={customColor}
         />
         <main className="flex-1 flex items-center justify-center">
-          <AudioVisualizer visualizationStyle={visualizationStyle} colorPalette={colorPalette}/>
+          <AudioVisualizer visualizationStyle={visualizationStyle} colorPalette={colorPalette} customColor={customColor}/>
         </main>
       </div>
     </SidebarProvider>

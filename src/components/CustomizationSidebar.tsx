@@ -5,17 +5,19 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem } 
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { ColorPaletteSelector } from './ColorPaletteSelector';
+import { Input } from "@/components/ui/input"
 
 interface CustomizationSidebarProps {
   setVisualizationStyle: React.Dispatch<React.SetStateAction<'waveform' | 'frequencyBars' | 'line'>>;
   visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
   setColorPalette: React.Dispatch<React.SetStateAction<string>>;
   colorPalette: string;
+  setCustomColor: React.Dispatch<React.SetStateAction<string>>;
+  customColor: string;
 }
 
 
-const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setColorPalette, colorPalette }: CustomizationSidebarProps) => {
-
+const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setColorPalette, colorPalette, setCustomColor, customColor }: CustomizationSidebarProps) => {
 
   return (
     <Sidebar collapsible="icon">
@@ -44,7 +46,18 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setCo
             </RadioGroup>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <ColorPaletteSelector setColorPalette={setColorPalette} colorPalette={colorPalette}/>
+            <ColorPaletteSelector setColorPalette={setColorPalette} colorPalette={colorPalette} setCustomColor={setCustomColor} customColor={customColor}/>
+            {colorPalette === 'custom' && (
+              <>
+                <Label htmlFor="customColorInput">Custom Color</Label>
+                <Input
+                  type="color"
+                  id="customColorInput"
+                  value={customColor}
+                  onChange={(e) => setCustomColor(e.target.value)}
+                />
+              </>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>

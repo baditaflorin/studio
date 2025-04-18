@@ -9,9 +9,10 @@ import LineVisualizer from './LineVisualizer';
 interface AudioVisualizerProps {
   visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
   colorPalette: string;
+  customColor: string;
 }
 
-const AudioVisualizer = ({ visualizationStyle, colorPalette }: AudioVisualizerProps) => {
+const AudioVisualizer = ({ visualizationStyle, colorPalette, customColor }: AudioVisualizerProps) => {
   const [audioData, setAudioData] = useState<Uint8Array | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -64,7 +65,7 @@ const AudioVisualizer = ({ visualizationStyle, colorPalette }: AudioVisualizerPr
     };
   }, [toast]);
 
-  const lineColor = colorPalette === 'custom' ? 'hsl(var(--chart-1))' : 'hsl(var(--audio-visualizer-line))';
+  const lineColor = colorPalette === 'custom' ? customColor : 'hsl(var(--audio-visualizer-line))';
 
 
   return (

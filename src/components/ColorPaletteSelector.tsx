@@ -6,9 +6,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 interface ColorPaletteSelectorProps {
   setColorPalette: React.Dispatch<React.SetStateAction<string>>;
   colorPalette: string;
+  setCustomColor: React.Dispatch<React.SetStateAction<string>>;
+  customColor: string;
 }
 
-export const ColorPaletteSelector = ({ setColorPalette, colorPalette }: ColorPaletteSelectorProps) => {
+export const ColorPaletteSelector = ({ setColorPalette, colorPalette, setCustomColor, customColor }: ColorPaletteSelectorProps) => {
   return (
     <>
       <Label>Color Palette</Label>
