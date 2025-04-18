@@ -1,6 +1,6 @@
 'use client';
 
-import AudioVisualizer from '@/components/AudioVisualizer';
+import AudioVisualizer from '@/components/AudioVisualizer/AudioVisualizer';
 import CustomizationSidebar from '@/components/CustomizationSidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { useState } from 'react';
@@ -19,4 +19,5 @@ export default function Home() {
     </SidebarProvider>
   );
 }
+
 
