@@ -22,6 +22,10 @@ export const ColorPaletteSelector = ({ setColorPalette, colorPalette, setCustomC
           <Label htmlFor="defaultPalette">Default</Label>
         </div>
         <div className="flex items-center space-x-2">
+          <RadioGroupItem value="rainbow" id="rainbowPalette" />
+          <Label htmlFor="rainbowPalette">Rainbow</Label>
+        </div>
+        <div className="flex items-center space-x-2">
           <RadioGroupItem value="custom" id="customPalette" />
           <Label htmlFor="customPalette">Custom</Label>
         </div>
@@ -29,5 +33,3 @@ export const ColorPaletteSelector = ({ setColorPalette, colorPalette, setCustomC
     </>
   );
 };
-
-    

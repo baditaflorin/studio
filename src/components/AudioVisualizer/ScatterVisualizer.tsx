@@ -2,18 +2,18 @@
 
 import { useEffect } from 'react';
 
-interface FrequencyBarsVisualizerProps {
+interface ScatterVisualizerProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   audioData: Uint8Array;
   getColor: (index: number, total: number) => string;
 }
 
-const FrequencyBarsVisualizer = ({ canvasRef, audioData, getColor }: FrequencyBarsVisualizerProps) => {
+const ScatterVisualizer = ({ canvasRef, audioData, getColor }: ScatterVisualizerProps) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const drawFrequencyBars = () => {
+    const drawScatter = () => {
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
       const ctx = canvas.getContext('2d');
@@ -22,21 +22,23 @@ const FrequencyBarsVisualizer = ({ canvasRef, audioData, getColor }: FrequencyBa
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      const barWidth = canvasWidth / audioData.length;
-      let x = 0;
-
       for (let i = 0; i < audioData.length; i++) {
-        const barHeight = audioData[i];
+        const value = audioData[i];
+        const x = Math.random() * canvasWidth;
+        const y = Math.random() * canvasHeight;
+        const size = value / 20;
+
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, 2 * Math.PI);
         ctx.fillStyle = getColor(i, audioData.length);
-        ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
-        x += barWidth;
+        ctx.fill();
       }
     };
 
-    drawFrequencyBars();
+    drawScatter();
   }, [canvasRef, audioData, getColor]);
 
   return null;
 };
 
-export default FrequencyBarsVisualizer;
+export default ScatterVisualizer;

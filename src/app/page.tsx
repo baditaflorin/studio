@@ -6,8 +6,8 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { useState } from 'react';
 
 export default function Home() {
-  const [visualizationStyle, setVisualizationStyle] = useState<'waveform' | 'frequencyBars' | 'line'>('line');
-  const [colorPalette, setColorPalette] = useState<string>('default');
+  const [visualizationStyle, setVisualizationStyle] = useState<'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle'>('line');
+  const [colorPalette, setColorPalette] = useState<string>('rainbow');
   const [customColor, setCustomColor] = useState<string>('#008080');
 
   return (
@@ -28,5 +28,3 @@ export default function Home() {
     </SidebarProvider>
   );
 }
-
-    

@@ -5,9 +5,11 @@ import { useToast } from "@/hooks/use-toast"
 import WaveformVisualizer from './WaveformVisualizer';
 import FrequencyBarsVisualizer from './FrequencyBarsVisualizer';
 import LineVisualizer from './LineVisualizer';
+import ScatterVisualizer from './ScatterVisualizer';
+import CircleVisualizer from './CircleVisualizer';
 
 interface AudioVisualizerProps {
-  visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
+  visualizationStyle: 'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle';
   colorPalette: string;
   customColor: string;
 }
@@ -65,7 +67,16 @@ const AudioVisualizer = ({ visualizationStyle, colorPalette, customColor }: Audi
     };
   }, [toast]);
 
-  const lineColor = colorPalette === 'custom' ? customColor : 'hsl(var(--audio-visualizer-line))';
+  const getColor = (index: number, total: number) => {
+    if (colorPalette === 'custom') {
+      return customColor;
+    } else if (colorPalette === 'rainbow') {
+      const hue = (index / total) * 360;
+      return `hsl(${hue}, 100%, 50%)`;
+    } else {
+      return 'hsl(var(--audio-visualizer-line))';
+    }
+  };
 
 
   return (
@@ -75,19 +86,23 @@ const AudioVisualizer = ({ visualizationStyle, colorPalette, customColor }: Audi
       height={400}
       className="bg-audio-visualizer-bg rounded-md shadow-md"
     >
-      {visualizationStyle === 'waveform' && audioData && (
-        <WaveformVisualizer canvasRef={canvasRef} audioData={audioData} lineColor={lineColor} />
+      {audioData && visualizationStyle === 'waveform' && (
+        <WaveformVisualizer canvasRef={canvasRef} audioData={audioData} getColor={getColor} />
       )}
-      {visualizationStyle === 'frequencyBars' && audioData && (
-        <FrequencyBarsVisualizer canvasRef={canvasRef} audioData={audioData} lineColor={lineColor} />
+      {audioData && visualizationStyle === 'frequencyBars' && (
+        <FrequencyBarsVisualizer canvasRef={canvasRef} audioData={audioData} getColor={getColor} />
       )}
-      {visualizationStyle === 'line' && audioData && (
-        <LineVisualizer canvasRef={canvasRef} audioData={audioData} lineColor={lineColor} />
+      {audioData && visualizationStyle === 'line' && (
+        <LineVisualizer canvasRef={canvasRef} audioData={audioData} getColor={getColor} />
+      )}
+       {audioData && visualizationStyle === 'scatter' && (
+        <ScatterVisualizer canvasRef={canvasRef} audioData={audioData} getColor={getColor} />
+      )}
+      {audioData && visualizationStyle === 'circle' && (
+        <CircleVisualizer canvasRef={canvasRef} audioData={audioData} getColor={getColor} />
       )}
     </canvas>
   );
 };
 
 export default AudioVisualizer;
-
-    

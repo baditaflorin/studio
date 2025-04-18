@@ -5,10 +5,10 @@ import { useEffect } from 'react';
 interface LineVisualizerProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   audioData: Uint8Array;
-  lineColor: string;
+  getColor: (index: number, total: number) => string;
 }
 
-const LineVisualizer = ({ canvasRef, audioData, lineColor }: LineVisualizerProps) => {
+const LineVisualizer = ({ canvasRef, audioData, getColor }: LineVisualizerProps) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -23,7 +23,7 @@ const LineVisualizer = ({ canvasRef, audioData, lineColor }: LineVisualizerProps
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       ctx.lineWidth = 2;
-      ctx.strokeStyle = lineColor;
+      ctx.strokeStyle = getColor(0, 1);
       ctx.beginPath();
 
       const sliceWidth = canvasWidth / (audioData.length - 1);
@@ -47,11 +47,9 @@ const LineVisualizer = ({ canvasRef, audioData, lineColor }: LineVisualizerProps
     };
 
     drawLine();
-  }, [canvasRef, audioData, lineColor]);
+  }, [canvasRef, audioData, getColor]);
 
   return null;
 };
 
 export default LineVisualizer;
-
-    

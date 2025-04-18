@@ -8,8 +8,8 @@ import { ColorPaletteSelector } from './ColorPaletteSelector';
 import { Input } from "@/components/ui/input"
 
 interface CustomizationSidebarProps {
-  setVisualizationStyle: React.Dispatch<React.SetStateAction<'waveform' | 'frequencyBars' | 'line'>>;
-  visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
+  setVisualizationStyle: React.Dispatch<React.SetStateAction<'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle'>>;
+  visualizationStyle: 'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle';
   setColorPalette: React.Dispatch<React.SetStateAction<string>>;
   colorPalette: string;
   setCustomColor: React.Dispatch<React.SetStateAction<string>>;
@@ -29,7 +29,7 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setCo
           <SidebarMenuItem>
             <Label>Visualization Style</Label>
             <RadioGroup defaultValue={visualizationStyle} onValueChange={style => {
-              setVisualizationStyle(style as 'waveform' | 'frequencyBars' | 'line')
+              setVisualizationStyle(style as 'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle')
             }}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="waveform" id="waveform" />
@@ -42,6 +42,14 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setCo
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="line" id="line" />
                 <Label htmlFor="line">Line</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="scatter" id="scatter" />
+                <Label htmlFor="scatter">Scatter</Label>
+              </div>
+               <div className="flex items-center space-x-2">
+                <RadioGroupItem value="circle" id="circle" />
+                <Label htmlFor="circle">Circle</Label>
               </div>
             </RadioGroup>
           </SidebarMenuItem>
@@ -66,5 +74,3 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setCo
 };
 
 export default CustomizationSidebar;
-
-    
