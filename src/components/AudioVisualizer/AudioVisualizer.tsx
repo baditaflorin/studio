@@ -8,9 +8,10 @@ import LineVisualizer from './LineVisualizer';
 
 interface AudioVisualizerProps {
   visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
+  colorPalette: string;
 }
 
-const AudioVisualizer = ({ visualizationStyle }: AudioVisualizerProps) => {
+const AudioVisualizer = ({ visualizationStyle, colorPalette }: AudioVisualizerProps) => {
   const [audioData, setAudioData] = useState<Uint8Array | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -63,6 +64,9 @@ const AudioVisualizer = ({ visualizationStyle }: AudioVisualizerProps) => {
     };
   }, [toast]);
 
+  const lineColor = colorPalette === 'custom' ? 'hsl(var(--chart-1))' : 'hsl(var(--audio-visualizer-line))';
+
+
   return (
     <canvas
       ref={canvasRef}
@@ -71,16 +75,18 @@ const AudioVisualizer = ({ visualizationStyle }: AudioVisualizerProps) => {
       className="bg-audio-visualizer-bg rounded-md shadow-md"
     >
       {visualizationStyle === 'waveform' && audioData && (
-        <WaveformVisualizer canvasRef={canvasRef} audioData={audioData} />
+        <WaveformVisualizer canvasRef={canvasRef} audioData={audioData} lineColor={lineColor} />
       )}
       {visualizationStyle === 'frequencyBars' && audioData && (
-        <FrequencyBarsVisualizer canvasRef={canvasRef} audioData={audioData} />
+        <FrequencyBarsVisualizer canvasRef={canvasRef} audioData={audioData} lineColor={lineColor} />
       )}
       {visualizationStyle === 'line' && audioData && (
-        <LineVisualizer canvasRef={canvasRef} audioData={audioData} />
+        <LineVisualizer canvasRef={canvasRef} audioData={audioData} lineColor={lineColor} />
       )}
     </canvas>
   );
 };
 
 export default AudioVisualizer;
+
+    

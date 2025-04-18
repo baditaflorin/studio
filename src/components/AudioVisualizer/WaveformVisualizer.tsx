@@ -5,9 +5,10 @@ import { useEffect } from 'react';
 interface WaveformVisualizerProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   audioData: Uint8Array;
+  lineColor: string;
 }
 
-const WaveformVisualizer = ({ canvasRef, audioData }: WaveformVisualizerProps) => {
+const WaveformVisualizer = ({ canvasRef, audioData, lineColor }: WaveformVisualizerProps) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -22,7 +23,7 @@ const WaveformVisualizer = ({ canvasRef, audioData }: WaveformVisualizerProps) =
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       ctx.lineWidth = 2;
-      ctx.strokeStyle = 'hsl(var(--audio-visualizer-line))';
+      ctx.strokeStyle = lineColor;
       ctx.beginPath();
 
       const sliceWidth = canvasWidth / (audioData.length - 1);
@@ -46,9 +47,11 @@ const WaveformVisualizer = ({ canvasRef, audioData }: WaveformVisualizerProps) =
     };
 
     drawWaveform();
-  }, [canvasRef, audioData]);
+  }, [canvasRef, audioData, lineColor]);
 
   return null;
 };
 
 export default WaveformVisualizer;
+
+    

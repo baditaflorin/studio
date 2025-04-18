@@ -5,9 +5,10 @@ import { useEffect } from 'react';
 interface FrequencyBarsVisualizerProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   audioData: Uint8Array;
+  lineColor: string;
 }
 
-const FrequencyBarsVisualizer = ({ canvasRef, audioData }: FrequencyBarsVisualizerProps) => {
+const FrequencyBarsVisualizer = ({ canvasRef, audioData, lineColor }: FrequencyBarsVisualizerProps) => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -26,16 +27,18 @@ const FrequencyBarsVisualizer = ({ canvasRef, audioData }: FrequencyBarsVisualiz
 
       for (let i = 0; i < audioData.length; i++) {
         const barHeight = audioData[i];
-        ctx.fillStyle = 'hsl(var(--audio-visualizer-line))';
+        ctx.fillStyle = lineColor;
         ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
         x += barWidth;
       }
     };
 
     drawFrequencyBars();
-  }, [canvasRef, audioData]);
+  }, [canvasRef, audioData, lineColor]);
 
   return null;
 };
 
 export default FrequencyBarsVisualizer;
+
+    

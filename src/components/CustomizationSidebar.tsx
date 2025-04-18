@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from 'react';
-import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem } from '@/components/ui/sidebar';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { ColorPaletteSelector } from './ColorPaletteSelector';
 
 interface CustomizationSidebarProps {
   setVisualizationStyle: React.Dispatch<React.SetStateAction<'waveform' | 'frequencyBars' | 'line'>>;
   visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
+  setColorPalette: React.Dispatch<React.SetStateAction<string>>;
+  colorPalette: string;
 }
 
 
-const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle }: CustomizationSidebarProps) => {
+const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle, setColorPalette, colorPalette }: CustomizationSidebarProps) => {
 
 
   return (
@@ -24,7 +27,6 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle }: Cus
           <SidebarMenuItem>
             <Label>Visualization Style</Label>
             <RadioGroup defaultValue={visualizationStyle} onValueChange={style => {
-              console.log('Radio button clicked, new style:', style);
               setVisualizationStyle(style as 'waveform' | 'frequencyBars' | 'line')
             }}>
               <div className="flex items-center space-x-2">
@@ -41,6 +43,9 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle }: Cus
               </div>
             </RadioGroup>
           </SidebarMenuItem>
+          <SidebarMenuItem>
+            <ColorPaletteSelector setColorPalette={setColorPalette} colorPalette={colorPalette}/>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
     </Sidebar>
@@ -48,3 +53,5 @@ const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle }: Cus
 };
 
 export default CustomizationSidebar;
+
+    
