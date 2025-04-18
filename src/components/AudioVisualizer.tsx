@@ -15,6 +15,7 @@ const AudioVisualizer = () => {
   useEffect(() => {
     const getMicrophone = async () => {
       try {
+        console.log("Attempting to get microphone...");
         audioContextRef.current = new AudioContext();
         analyserRef.current = audioContextRef.current.createAnalyser();
         analyserRef.current.fftSize = 256;
@@ -22,6 +23,7 @@ const AudioVisualizer = () => {
         const dataArray = new Uint8Array(bufferLength);
 
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        console.log("Microphone stream obtained:", stream);
         const source = audioContextRef.current.createMediaStreamSource(stream);
         source.connect(analyserRef.current);
 
@@ -34,6 +36,7 @@ const AudioVisualizer = () => {
 
         renderFrame();
       } catch (error) {
+        console.error("Error accessing microphone:", error);
         toast({
           title: "Error",
           description: "Could not access microphone.",
