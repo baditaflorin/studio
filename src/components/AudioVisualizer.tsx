@@ -8,9 +8,9 @@ const AudioVisualizer = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number>(0);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const { toast } = useToast()
-  const [visualizationStyle, setVisualizationStyle] = useState<'waveform' | 'frequencyBars' | 'scatter'>('waveform');
+  const [visualizationStyle, setVisualizationStyle] = useState<'waveform' | 'frequencyBars' | 'line'>('line');
 
   useEffect(() => {
     const getMicrophone = async () => {
@@ -29,7 +29,7 @@ const AudioVisualizer = () => {
 
         const renderFrame = () => {
           if (!analyserRef.current) return;
-          analyserRef.current.getByteFrequencyData(dataArray);
+          analyserRef.current.getByteTimeDomainData(dataArray);
           setAudioData(new Uint8Array(dataArray));
           animationFrameRef.current = requestAnimationFrame(renderFrame);
         };
@@ -77,8 +77,8 @@ const AudioVisualizer = () => {
         drawWaveform(ctx, canvasWidth, canvasHeight, audioData!);
       } else if (visualizationStyle === 'frequencyBars') {
         drawFrequencyBars(ctx, canvasWidth, canvasHeight, audioData!);
-      } else if (visualizationStyle === 'scatter') {
-        drawScatterPlot(ctx, canvasWidth, canvasHeight, audioData!);
+      } else if (visualizationStyle === 'line') {
+        drawLine(ctx, canvasWidth, canvasHeight, audioData!);
       }
     };
 
@@ -122,19 +122,31 @@ const AudioVisualizer = () => {
     }
   };
 
-  const drawScatterPlot = (ctx: CanvasRenderingContext2D, width: number, height: number, data: Uint8Array) => {
-    for (let i = 0; i < data.length; i++) {
-      const angle = (i / data.length) * Math.PI * 2;
-      const radius = data[i] / 255 * Math.min(width, height) / 2;
-      const x = width / 2 + radius * Math.cos(angle);
-      const y = height / 2 + radius * Math.sin(angle);
+  const drawLine = (ctx: CanvasRenderingContext2D, width: number, height: number, data: Uint8Array) => {
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#008080';
+    ctx.beginPath();
 
-      ctx.fillStyle = '#008080';
-      ctx.beginPath();
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
-      ctx.fill();
+    const sliceWidth = width / (data.length - 1);
+    let x = 0;
+    const centerY = height / 2;
+
+    for (let i = 0; i < data.length; i++) {
+      const v = data[i] / 128.0; // Normalize the data to 0-1
+      const y = centerY + (v - 0.5) * height / 2; // Center the line and scale the amplitude
+
+      if (i === 0) {
+        ctx.moveTo(x, centerY); // Start at the center
+      } else {
+        ctx.lineTo(x, y);
+      }
+
+      x += sliceWidth;
     }
+
+    ctx.stroke();
   };
+
 
   return (
     <canvas
@@ -147,5 +159,3 @@ const AudioVisualizer = () => {
 };
 
 export default AudioVisualizer;
-
-    

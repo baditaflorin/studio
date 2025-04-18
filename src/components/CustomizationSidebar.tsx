@@ -5,8 +5,14 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, S
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-const CustomizationSidebar = () => {
-  const [visualizationStyle, setVisualizationStyle] = useState<'waveform' | 'frequencyBars' | 'scatter'>('waveform');
+interface CustomizationSidebarProps {
+  setVisualizationStyle: React.Dispatch<React.SetStateAction<'waveform' | 'frequencyBars' | 'line'>>;
+  visualizationStyle: 'waveform' | 'frequencyBars' | 'line';
+}
+
+
+const CustomizationSidebar = ({ setVisualizationStyle, visualizationStyle }: CustomizationSidebarProps) => {
+
 
   return (
     <Sidebar collapsible="icon">
@@ -17,7 +23,10 @@ const CustomizationSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <Label>Visualization Style</Label>
-            <RadioGroup defaultValue={visualizationStyle} onValueChange={style => setVisualizationStyle(style as 'waveform' | 'frequencyBars' | 'scatter')}>
+            <RadioGroup defaultValue={visualizationStyle} onValueChange={style => {
+              console.log('Radio button clicked, new style:', style);
+              setVisualizationStyle(style as 'waveform' | 'frequencyBars' | 'line')
+            }}>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="waveform" id="waveform" />
                 <Label htmlFor="waveform">Waveform</Label>
@@ -27,8 +36,8 @@ const CustomizationSidebar = () => {
                 <Label htmlFor="frequencyBars">Frequency Bars</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="scatter" id="scatter" />
-                <Label htmlFor="scatter">Scatter Plot</Label>
+                <RadioGroupItem value="line" id="line" />
+                <Label htmlFor="line">Line</Label>
               </div>
             </RadioGroup>
           </SidebarMenuItem>
