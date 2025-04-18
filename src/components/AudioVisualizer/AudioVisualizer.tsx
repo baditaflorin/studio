@@ -7,21 +7,22 @@ import FrequencyBarsVisualizer from './FrequencyBarsVisualizer';
 import LineVisualizer from './LineVisualizer';
 import ScatterVisualizer from './ScatterVisualizer';
 import CircleVisualizer from './CircleVisualizer';
+import PacmanVisualizer from './PacmanVisualizer';
 
 interface AudioVisualizerProps {
-  visualizationStyle: 'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle';
+  visualizationStyle: 'waveform' | 'frequencyBars' | 'line' | 'scatter' | 'circle' | 'pacman';
   colorPalette: string;
   customColor: string;
-  volumeThreshold: number;
-  sensitivity: number;
+  volumeThreshold?: number;
+  sensitivity?: number;
 }
 
 const AudioVisualizer = ({
   visualizationStyle,
   colorPalette,
   customColor,
-  volumeThreshold,
-  sensitivity,
+  volumeThreshold = 50,
+  sensitivity = 50,
 }: AudioVisualizerProps) => {
   const [audioData, setAudioData] = useState<Uint8Array | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -36,7 +37,7 @@ const AudioVisualizer = ({
         console.log('Attempting to get microphone...');
         audioContextRef.current = new AudioContext();
         analyserRef.current = audioContextRef.current.createAnalyser();
-        analyserRef.current.fftSize = 2048; // Increase for more detailed frequency analysis
+        analyserRef.current.fftSize = 2048;
         const bufferLength = analyserRef.current.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
 
@@ -130,6 +131,15 @@ const AudioVisualizer = ({
       )}
       {audioData && visualizationStyle === 'circle' && (
         <CircleVisualizer
+          canvasRef={canvasRef}
+          audioData={audioData}
+          getColor={getColor}
+          volumeThreshold={volumeThreshold}
+          sensitivity={sensitivity}
+        />
+      )}
+      {audioData && visualizationStyle === 'pacman' && (
+        <PacmanVisualizer
           canvasRef={canvasRef}
           audioData={audioData}
           getColor={getColor}
