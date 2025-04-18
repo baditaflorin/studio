@@ -6,12 +6,13 @@ interface FrequencyBarsVisualizerProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   audioData: Uint8Array;
   getColor: (index: number, total: number) => string;
+  analyser: AnalyserNode | null;
 }
 
-const FrequencyBarsVisualizer = ({ canvasRef, audioData, getColor }: FrequencyBarsVisualizerProps) => {
+const FrequencyBarsVisualizer = ({ canvasRef, audioData, getColor, analyser }: FrequencyBarsVisualizerProps) => {
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !analyser) return;
 
     const drawFrequencyBars = () => {
       const canvasWidth = canvas.width;
@@ -22,20 +23,30 @@ const FrequencyBarsVisualizer = ({ canvasRef, audioData, getColor }: FrequencyBa
 
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
-      const barWidth = canvasWidth / audioData.length;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      analyser.getByteFrequencyData(dataArray);
+
+      const barWidth = (canvasWidth / bufferLength);
+      let barHeight;
       let x = 0;
 
-      // Iterate through the audio data to draw frequency bars
-      for (let i = 0; i < audioData.length; i++) {
-        const barHeight = audioData[i]; // Height of the bar corresponds to the frequency intensity
-        ctx.fillStyle = getColor(i, audioData.length); // Color of the bar
-        ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight); // Draw the bar
-        x += barWidth; // Move to the next position
+      for (let i = 0; i < bufferLength; i++) {
+        barHeight = dataArray[i];
+
+        const color = getColor(i, bufferLength);
+        ctx.fillStyle = color;
+
+        // Draw the bar
+        ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
+
+        x += barWidth;
       }
     };
 
     drawFrequencyBars();
-  }, [canvasRef, audioData, getColor]);
+  }, [canvasRef, audioData, getColor, analyser]);
 
   return null;
 };
