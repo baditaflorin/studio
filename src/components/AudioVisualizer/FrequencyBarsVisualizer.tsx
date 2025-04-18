@@ -25,11 +25,12 @@ const FrequencyBarsVisualizer = ({ canvasRef, audioData, getColor }: FrequencyBa
       const barWidth = canvasWidth / audioData.length;
       let x = 0;
 
+      // Iterate through the audio data to draw frequency bars
       for (let i = 0; i < audioData.length; i++) {
-        const barHeight = audioData[i];
-        ctx.fillStyle = getColor(i, audioData.length);
-        ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
-        x += barWidth;
+        const barHeight = audioData[i]; // Height of the bar corresponds to the frequency intensity
+        ctx.fillStyle = getColor(i, audioData.length); // Color of the bar
+        ctx.fillRect(x, canvasHeight - barHeight, barWidth, barHeight); // Draw the bar
+        x += barWidth; // Move to the next position
       }
     };
 

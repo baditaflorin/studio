@@ -24,8 +24,9 @@ const ScatterVisualizer = ({ canvasRef, audioData, getColor }: ScatterVisualizer
 
       for (let i = 0; i < audioData.length; i++) {
         const value = audioData[i];
-        const x = Math.random() * canvasWidth;
-        const y = Math.random() * canvasHeight;
+        // Correlate x and y with the audio data to reduce randomness
+        const x = (i / audioData.length) * canvasWidth; // Spread points across the width
+        const y = (value / 255) * canvasHeight; // Height based on audio value
         const size = value / 20;
 
         ctx.beginPath();
